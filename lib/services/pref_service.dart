@@ -5,12 +5,10 @@ class PrefService {
   PrefService._(this._prefs);
   final SharedPreferences _prefs;
 
-  // Semua key dikumpulkan di sini.
   static const _kOpenCount = 'open_count';
   static const _kDarkMode = 'is_dark_mode';
   static const _kProfile = 'profile_data';
 
-  /// Dipanggil sekali saat aplikasi mulai.
   static Future<PrefService> init() async {
     final prefs = await SharedPreferences.getInstance();
     return PrefService._(prefs);
@@ -35,7 +33,6 @@ class PrefService {
     try {
       return ProfileData.fromJson(raw);
     } catch (_) {
-      // Data rusak? Jangan crash, kembali ke bawaan.[cite: 8]
       return ProfileData.defaults;
     }
   }
@@ -44,4 +41,7 @@ class PrefService {
       _prefs.setString(_kProfile, profile.toJson());
 
   Future<void> clearProfile() => _prefs.remove(_kProfile);
+
+  // ---------- Debugging ----------
+  Set<String> get debugKeys => _prefs.getKeys();
 }

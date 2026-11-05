@@ -11,7 +11,6 @@ class ProfileData {
   final String title;
   final String bio;
 
-  /// Data bawaan saat belum ada data tersimpan.
   static const defaults = ProfileData(
     name: 'Revita Dwi Enggarta',
     title: 'Software Engineer',

@@ -25,7 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    _profile = widget.prefs.profile; // baca data tersimpan
+    _profile = widget.prefs.profile; 
   }
 
   Future<void> _edit() async {
@@ -33,13 +33,22 @@ class _ProfilePageState extends State<ProfilePage> {
       context,
       MaterialPageRoute(builder: (_) => EditProfilePage(initial: _profile)),
     );
-    if (result == null) return; // pengguna menekan back
+    if (result == null) return; 
 
     await widget.prefs.saveProfile(result);
     if (!mounted) return;
     setState(() => _profile = result);
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Profil tersimpan')),
+    );
+  }
+
+  Future<void> _reset() async {
+    await widget.prefs.clearProfile();
+    if (!mounted) return;
+    setState(() => _profile = widget.prefs.profile);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Profil dikembalikan ke bawaan')),
     );
   }
 
@@ -74,8 +83,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Text(initial, style: const TextStyle(fontSize: 32)),
                   ),
                   const SizedBox(height: 16),
-                  Text(_profile.name,
-                      style: Theme.of(context).textTheme.headlineSmall),
+                  Text(
+                    _profile.name,
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
                   const SizedBox(height: 4),
                   Text(_profile.title),
                   const SizedBox(height: 12),
@@ -91,7 +102,12 @@ class _ProfilePageState extends State<ProfilePage> {
             value: widget.isDark,
             onChanged: widget.onThemeChanged,
           ),
-          // Lab 11 akan menambahkan menu "Proyek Saya" di sini.
+          const SizedBox(height: 8),
+          OutlinedButton.icon(
+            onPressed: _reset,
+            icon: const Icon(Icons.restore),
+            label: const Text('Reset Profil'),
+          ),
           const SizedBox(height: 24),
           Center(
             child: Text(
